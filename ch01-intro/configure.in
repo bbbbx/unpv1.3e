@@ -1,0 +1,49 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ([2.69])
+AC_INIT(unp.h)
+# AC_CONFIG_SRCDIR([daytimetcpcli.c])
+AC_CONFIG_HEADERS([config.h])
+
+# The following cpu_vendor_os string goes into config.h.
+AC_DEFINE_UNQUOTED(CPU_VENDOR_OS, "$host", [CPU, vendor, and operating system])
+
+# Checks for programs.
+AC_PROG_CC
+
+# Checks for libraries.
+
+# Checks for header files.
+AC_CHECK_HEADERS([sys/select.h poll.h sys/event.h string.h sys/ioctl.h sys/filio.h sys/sockio.h pthread.h net/if_dl.h netinet/sctp.h ])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_TYPE_SIZE_T
+AC_CHECK_TYPE(struct if_nameindex,
+  AC_DEFINE(HAVE_IF_NAMEINDEX_STRUCT, 1, Define to 1 if <net/if.h> defines struct if_nameindex), , [
+    #include <sys/types.h>
+    #include <sys/socket.h>
+    #include <net/if.h>
+  ])
+AC_CHECK_TYPE(struct timespec,
+  AC_DEFINE(HAVE_TIMESPEC_STRUCT, 1, Define to 1 if <time.h> or <sys/time.h> defines struct timespec), , [
+    #if TIME_WITH_SYS_TIME
+      #include <sys/time.h>
+      #include <time.h>
+    #else
+      #if HAVE_SYS_TIME_H
+        #include <sys/time.h>
+      #else
+        #include <time.h>
+      #endif
+    #endif
+  ])
+AC_CHECK_TYPE(struct addrinfo,
+  AC_DEFINE(HAVE_ADDRINFO_STRUCT, 1, Define to 1 if <netdb.h> defines struct addrinfo), , [
+    #include <netdb.h>
+  ])
+
+# Checks for library functions.
+AC_CHECK_FUNCS([bzero gethostbyname2])
+
+AC_OUTPUT
