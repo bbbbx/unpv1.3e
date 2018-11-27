@@ -1,0 +1,61 @@
+\section{Introduction}
+
+  \subsection{BSD Networking History}
+
+    The sockets API 源自 4.2BSD system，在 1983 年被 released。
+    
+    很多 Unix systems 都是从 BSD networking code 的某个 version 开始开发的，我们称这些 implementations 为 \textit{Berkeley-derived implementations}。
+    很多商业版本的 Unix 都是基于 System V Release 4（SVR4）的。有些商业版本的 Unix 有 Berkeley-derived networking code（例如 UnixWare 2.x），而有些是独立开发的（例如 Solaris 2.x）。
+    而 Linux 的 networking code 和 sockets API 都是从头开始开发的。
+
+    \begin{minted}[
+      frame=lines,
+      breaklines
+    ]{text}
+                                                      +--------------------+
+                                                      |   4.2BSD(1983)     |
+                                                      +--------------------+
+                                                        |
+                                                        |
+                                                        v
+                                                      +--------------------+
+                                                      |   4.3BSD(1986)     |
+                                                      +--------------------+
+                                                        |
+                                                        |
+                                                        v
++-----------------------------------------------+     +----------------------+
+| BSD Network Software Release 1.0(1989): Net/1 | <-- |  4.3BSD Tahoe(1988)  |
++-----------------------------------------------+     +----------------------+
+                                                        |
+                                                        |
+                                                        v
++-----------------------------------------------+     +-----------------------+
+| BSD Network Software Release 2.0(1991): Net/2 | <-- |  4.3BSD Reno(1990)    |
++-----------------------------------------------+     +-----------------------+
+                                                        |
+                                                        |
+                                                        v
+                                                      +-----------------------+
+                                                      |    4.4BSD(1993)       |
+                                                      +-----------------------+
+                                                        |
+                                                        |
+                                                        v
+       + - - - - - - - - - - - - - - - - - - - - - - - - - -+
+       ' BSD/OS, FreeBSD, NetBSD, OpenBSD 由两个版本发展而来:'
+       '                                                    '
+       ' +------------------------------------------------+ '
+       ' | 4.4BSD-Lite(1994) referred to in text as Net/3 | '
+       ' +------------------------------------------------+ '
+       '   |                                                '
+       '   |                                                '
+       '   v                                                '
+       ' +------------------------------------------------+ '
+       ' |               4.4BSD-Lite2(1995)               | '
+       ' +------------------------------------------------+ '
+       '                                                    '
+       + - - - - - - - - - - - - - - - - - - - - - - - - - -+
+    \end{minted}
+
+    有关各种 BSD 版本和 Unix 的历史可查看 McKusick, M. K., Bostic, K., Karels, M.J., and Quarterman, J. S. 1996. \textit{The Design and Implementation of the 4.4BSD Operating System.} Addison-Wesley, Reading, MA. 的第一章。
