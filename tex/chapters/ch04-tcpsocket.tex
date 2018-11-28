@@ -1,2 +1,94 @@
 \section{Elementary TCP Sockets}
 
+  \subsection{\texttt{socket} 函数}
+
+    要做 network I/O，进程第一件要做的事就是调用 \texttt{socket} 函数，用来指定 communication protocol 的类型(使用 IPv4 的 TCP、使用 IPv6 的 UDP、Unix domain stream protocol 等）。
+
+    \begin{minted}[
+      frame=lines
+    ]{c}
+    #include <sys/socket.h>
+
+    int socket(int family, int type, int protocol);
+    \end{minted}
+
+  \subsection{\texttt{connect} 函数}
+  
+
+    \texttt{connect} 函数是被一个 TCP client 用来 establish 一个和 TCP server 的 connection 的。
+
+    \begin{minted}[
+      frame=lines
+    ]{c}
+    #include <sys/socket.h>
+
+    int connect(int sockfd, const struct sockaddr *servaddr, socklen_t addrlen);
+    \end{minted}
+
+  \subsection{\texttt{bind} 函数}
+
+    \texttt{bind} 函数用来将一个 local protocol address 赋值给一个 socket。
+
+    \begin{minted}[
+      frame=lines
+    ]{c}
+    #include <sys/socket.h>
+
+    int bind(int sockfd, const struct sockaddr *myaddr, socklen_t addrlen);
+    \end{minted}
+
+  \subsection{\texttt{listen} 函数}
+
+    \texttt{listen} 函数由一个 TCP server 来调用，该函数会做下列的两个 actions：
+
+    \begin{enumerate}
+      \item 当 \texttt{socket} 函数创建一个 socket 的时候，该 socket 是一个 active socket，而 \texttt{listen} 函数会将 unconnected socket 转换为一个 passive socket，
+        会将 socket 从 CLOSE state 变为 LISTEN state。
+      \item 该函数的第二个参数用来指定该 socket 的最大连接数。
+    \end{enumerate}
+
+    \begin{minted}[frame=lines]{c}
+    #include <sys/socket.h>
+
+    int listen(int sockfd, int backlog);
+    \end{minted}
+
+  \subsection{\texttt{accept} 函数}
+  
+    \texttt{accept} 函数由 TCP server 来调用，它返回在 completed connection queue 队头的下一个 completed connection。
+
+    \begin{minted}[frame=lines]{c}
+    #include <sys/socket.h>
+
+    int listen(int sockfd, struct sockaddr *cliaddr, socklen_t *addrlen);
+    \end{minted}
+
+    注意，\texttt{addrlen} 是一个 value-result argument（Section 3.3）。
+
+  \subsection{\texttt{close} 函数}
+
+    Unix 通用的 \texttt{close} 函数用来 close 一个 socket 和 terminate 一个 TCP connection。
+
+    \begin{minted}[frame=lines]{c}
+    #include <sys/socket.h>
+
+    int close(int sockfd);
+    \end{minted}
+    
+    \subsubsection{Descriptor Reference Counts}
+
+      \texttt{close} 函数只是将该 descriptor 的 reference count 减一。
+
+  \subsection{\texttt{getsockname} 和 \texttt{getpeername} 函数}
+
+    \texttt{getsockname} 函数用来返回一个 socket 的 local protocol address，\texttt{getpeername} 用来返回一个 socket 的 foreign protocol address。
+
+    \begin{minted}[frame=lines]{c}
+    #include <sys/socket.h>
+
+    int getsockname(int sockfd, struct sockaddr *localaddr, socklen_t *addrlen);
+      
+    int getpeername(int sockfd, struct sockaddr *peeraddr, socklen_t *addrlen);
+    \end{minted}
+
+    注意，这两个函数的最后一个参数都是 value-result argument。也就是说，这两个函数都是用来填充 \texttt{localaddr} 或 \texttt{peeraddr} 指向的 socket address structure 的。
