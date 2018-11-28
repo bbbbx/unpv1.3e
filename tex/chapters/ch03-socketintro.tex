@@ -87,3 +87,92 @@
     \subsubsection{Comparison of Socket Address Structures}
 
       本书会遇到 5 种 socket address structure：IPv4、IPv6、Unix domain、datalink 和 storage。
+
+  \subsection{Value-Result Arguments}
+
+    有一种参数被称为 \textit{value-result} argument。
+    
+    函数 \texttt{accept}、\texttt{recvform}、\texttt{getsockname} 和 \texttt{getpeername}。这四个函数的两个参数是：
+    指向 socket address structure 的指针和一个指向 integer 的指针，该 integer 包含了该 structure 的 size。例如：
+
+    \begin{minted}[
+      frame=lines
+    ]{c}
+    struct sockaddr_un cli;    /* Unix domain */
+    socklen_t          len;
+
+    len = sizeof(cli);            /* len 是一个 value */
+    getpeername(unixfd, (SA *)&cli, &len);
+    /* len 的 value 可能会被改变 */
+    \end{minted}
+
+    该 structure 的 size 在函数被调用时是一个 \textit{value}，而当函数返回时，size 就变成了 \textit{result}。这种类型就参数就称为 \textit{value-result} argument。
+
+  \subsection{Byte Ordering Functions}
+
+
+    什么是 \textit{little-endian} byte order？什么是 \textit{big-endian} byte order？
+
+    我们把特定的 system 使用的 blyutdee:ordering 称为 \textit{host byte order}。大多数的 host byte order 都是 little-endian byte order。
+
+    因为 networking protocols 需要指定一个 \textit{network byte order}，所有，作为 network programmers 就必须要能够处理这些 byte ordering 的不同之处。
+    而 Internet protocols 使用的是 big-endian byte ordering。
+
+    这两种 bytes 之间可以使用下面四个函数进行转换。
+
+    \begin{minted}[
+      frame=lines
+    ]{c}
+    #include <netinet/in.h>
+
+    uint16_t htons(uint16_t host16bitvalue);
+    uint32_t htons(uint32_t host32bitvalue);
+
+    uint16_t ntohs(uint16_t net16bitvalue);
+    uint32_t ntohs(uint32_t net32bitvalue);
+    \end{minted}
+
+    其中 h 代表 host、n 代表 network、s 代表 short、l 代表 long。
+
+  \subsection{\texttt{inet\_aton}、\texttt{inet\_addr} 和 \texttt{inet\_ntoa} 函数}
+
+    这些函数可用于将 Internet addresses 在 ASCII string 和 network byte ordered binary values 之间转换。
+
+    \begin{minted}[
+      frame=lines
+    ]{c}
+    #include <arpa/inet.h>
+
+    int inet_aton(const char *strptr, struct in_addr *addrptr);
+    
+    in_addr_t inet_addr(const char *strptr);
+
+    char *inet_ntoa(struct in_addr_t inaddr);
+    \end{minted}
+
+    现在，人们都反对使用 \texttt{inet\_addr} 函数，而用函数 \texttt{inet\_aton} 来代替。更好的办法是使用 \texttt{inet\_pton}，它对 IPv4 和 IPv6 都可以处理。
+
+  \subsection{\texttt{inet\_pton} 和 \texttt{inet\_ntop} 函数}
+
+    这两个函数比较新，对 IPv4 和 IPv6 的地址都可以处理。其中字母 “p” 表示 presentation，“n” 表示 numeric。
+    而一个 address 的 presentation 格式通常是一个 ASCII string。
+
+    \begin{minted}[
+      frame=lines
+    ]{c}
+    #include <arpa/inet.h>
+
+    int inet_pton(int family, const char *strptr, void *addrptr);
+
+    const char *inet_ntop(int family, const void *addrptr, char *strptr, size_t len);
+    \end{minted}
+
+    其中的 \texttt{family} 可以是 \texttt{AF\_INET} 或 \texttt{AF\_INET6}。而 \texttt{len} 参数是 destination 的 size。
+    为了有助于指定这个 size，\texttt{<netinet/in.h>} 头文件定义了下列两个 definitions：
+
+    \begin{minted}[
+      frame=lines
+    ]{c}
+    #define INET_ADDRSTRLEN     16   /* for IPv4 dotted-decimal */
+    #define INET6_ADDRSTRLEN    46   /* for IPv6 hex string */
+    \end{minted}
