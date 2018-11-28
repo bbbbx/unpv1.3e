@@ -1,0 +1,32 @@
+\section{The Transport Layer: TCP, UDP, and SCTP}
+
+  \subsection{Stream Control Transmission Protocol（SCTP）}
+
+    RFC 2960 说明了 SCTP，并在 RFC 3309 有所更新。对 SCTP 的介绍可看 RFC 3286。
+    SCTP 在 client 和 server 之间提供的是 associations。SCTP 也给 applications 提供了 reliability、sequencing、flow control 和 full-duplex data transfer，就像 TCP 那样。
+
+    但与 TCP 不同的是，SCTP 是 \textit{message-orientebd} 的。就像 UDP 那样，sender 写入的一个 record 的 length 会被传到接收端的 application 中。
+
+  \subsection{SCTP Association Establishment and Termination}
+
+    SCTP 也是 connection-oriented 的，就像 TCP 那样。
+
+    \subsubsection{Four-Way Handshake}
+
+      当一个 SCTP association 被 established 的时候，会发生下列事情：
+
+      \begin{enumerate}
+        \item Server 调用 \texttt{socket}、\texttt{bind} 和 \texttt{listen}，作为 \textit{passive open}。
+        \item Client 通过调用 \texttt{connect} 来作为 \textit{active open}，这会使得 client SCTP 发送一个 INIT message 给 server，该 message 包含了 client 的 list of IP addresses、initial sequence number、用来标识本次 association 中所有 packet 的 initiation tag、client 发出请求时的 number of outbound streams、client 可以支持的 number of inbound streams。
+        \item Server 发回一个 INIT-ACK message 确认收到了 client 的 INIT message，该 message 包括了 server 的 list of IP addresses、initial sequence number、initiation tag、server 发出请求时的 number of outbound streams、server 可以支持的 number of inbound streams 和一个 state cookie。
+        \item Client 会用一个 COOKIE-ECHO message 来 echo server 的 state cookie。
+        \item Server 确认该 cookie 是正确的，并发回一个 COOKIE-ACK message。
+      \end{enumerate}
+
+      上面的过程就是 SCTP 的 \textit{four-way handshake}。有关建立 SCTP 的 association 的信息可以查看 Stewart, R. R. and Xie, Q. 2001. \textit{Stream Control Transmission Protocol (SCTP): A Reference Guide.} Addison-Wesley, Reading, MA. 的第四章。
+
+    \subsubsection{Association Termination}
+
+      不像 TCP 那样，SCTP 不允许有 "half-closed" association 的存在。当一端 shuts down 了一个 association，另一端必须停止发送新的数据。
+
+      SCTP 没有 TCP 那样的 TIME\_WAIT state，因为 SCTP 使用了 verification tags。所有的 chunks 都被该 tag 打上了标牌，该 tag 会被在 INIT chunks 中相互 exchanged。

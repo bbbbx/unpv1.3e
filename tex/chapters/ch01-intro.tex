@@ -1,5 +1,13 @@
 \section{Introduction}
 
+  \subsection{A Simple Daytime Client}
+
+    译者注：计算机网络各层实体间交换的单位信息称为协议数据单元（protocol data unit，简称 PDU），上层协议将自己的 PDU 作为下层的服务数据单元（service data unit，简称 SDU）传给下层协议。
+    例如 segment 就是传输层的 PDU。
+
+    应用层实体间交换的 PDU 称为 application data。传输层实体间间交换的 PDU 称为 message，其中 TCP 的 PDU 特称为 segment。
+    网络层实体间交换的 PDU 称为 IP datagram。链路层实体间交换的 PDU 称为 frame。
+
   \subsection{BSD Networking History}
 
     The sockets API 源自 4.2BSD system，在 1983 年被 released。

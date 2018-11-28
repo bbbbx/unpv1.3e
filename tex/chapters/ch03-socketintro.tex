@@ -1,0 +1,89 @@
+\section{Sockets Introduction}
+
+  \subsection{Socket Address Structures}
+
+    大多数 socket 函数都需要一个指向 socket address structure 的指针作为参数。每个 protocol suite 都定义了它自己的 socket address structure。
+    这些 structures 都以 \texttt{sockaddr\_} 开头并以一个对应着每个 protocol suite 的后缀来结尾。
+
+    \subsubsection{Pv4 Socket Address Structure}
+
+      一个 IPv4 的 socket address structure 就命名为 \texttt{sockaddr\_in}，并被定义在 \texttt{netinet/in.h} 头文件中。
+
+      \begin{minted}[
+        frame=lines
+      ]{c}
+      struct sockaddr_in {
+        uint8_t        sin_len;     /* structure 的 length（16） */
+        sa_family_t    sin_family;  /* AF_INET */
+        in_port_t      sin_port;    /* 16-bit TCP or UDP port number */
+                                    /* network bit ordered */
+        struct in_addr sin_addr;    /* 32-bit IPv4 address */
+                                    /* network bit ordered */
+        char           sin_zero[8]; /* 未使用 */
+      };
+
+      struct in_addr {
+        in_addr_t      s_addr;  /* 32-bit IPv4 address */
+                                /* network byte ordered */
+      };
+      \end{minted}
+
+    \subsubsection{Generic Socket Address Structure}
+
+      任何一个的 socket 函数都需要将传给它的 socket address structures 指针再进行处理。
+
+      在 \texttt{<sys/socket.h>} 头文件中定义了一个 \textit{generic} socket address。
+
+      \begin{minted}[
+        frame=lines
+      ]{c}
+      struct sockaddr {
+        uint8_t      sa_len;
+        sa_family_t  sa_family;   /* address family: AF_xxx value */
+        char         sa_data[14]; /* protocol-specific address */
+      };
+      \end{minted}
+
+    \subsubsection{IPv6 Socket Address Structure}
+
+      IPv6 的 socket address 被定义在 \texttt{<netinet/in.h>} 头文件中。
+
+      \begin{minted}[
+        frame=lines
+      ]{c}
+      #define SIN6_LEN /* required for compile-time tests */
+
+      struct sockaddr_in6 {
+        uint8_t         sin6_len;
+        sa_family_t     sin6_family;
+        in_port_t       sin6_port;
+
+        uint32_t        sin6_flowinfo;  /* flow information, undefined */
+        struct in6_addr sin6_addr;
+
+        uint32_t        sin6_scope_id;  /* set of interfaces for a scope */
+      };
+
+      struct in6_addr {
+        uint8_t    s6_addr[16];  /* 128-bit IPv6 address */
+      };
+        
+      \end{minted}
+
+    \subsubsection{New Generic Socket Address Structure}
+
+      IPv6 socket API 定义了一个新的 generic socket address structure，用来克服 \texttt{struct sockaddr} 的缺点。
+      \texttt{sockaddr\_storage} structure 被定义在 \texttt{<netinet/in.h>} 头文件中。
+
+      \begin{minted}[
+        frame=lines
+      ]{c}
+      struct sockaddr_storage {
+        uint8_t      ss_len;
+        sa_family_t  ss_family;
+      };
+      \end{minted}
+
+    \subsubsection{Comparison of Socket Address Structures}
+
+      本书会遇到 5 种 socket address structure：IPv4、IPv6、Unix domain、datalink 和 storage。
