@@ -42,3 +42,9 @@ again:
   }
   return (n);
 }
+
+void Connect(int family, const struct sockaddr *sa, socklen_t salen)
+{
+  if (connect(family, sa, salen) < 0)
+    err_sys("connect error");
+}

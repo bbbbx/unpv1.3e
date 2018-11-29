@@ -202,15 +202,48 @@ typedef void Sigfunc(int);       /* for signal handlers */
   };
 #endif
 
-int		 Socket(int, int, int);
+/**
+ * lib/wrapsock.c
+ */
+int		 Socket(int, int, int);               /* Section 1.4 */
 void   Bind(int, const SA *, socklen_t);
 void   Listen(int, int);
 int    Accept(int, SA *, socklen_t*);
+void   Connect(int, const SA *, socklen_t);
+
+/**
+ * lib/wrapunix.c
+ */
+pid_t  Fork(void);                          
 void   Write(int, void *, size_t);
 void   Close(int);
 
-char *sock_ntop(const struct sockaddr *, socklen_t);
-const char *Inet_ntop(int, const void *, char *, size_t);
+void str_echo(int);      /* Section 5.3 */
+void str_cli(FILE *, int);  /* Section 5.5 */
+
+char *sock_ntop(const struct sockaddr *, socklen_t);   /* Section 3.8 */
+
+ssize_t readn(int, void *, size_t);          /* Section 3.9 */
+ssize_t Readn(int, void *, size_t);
+
+ssize_t writen(int, const void *, size_t);   /* Section 3.9 */
+void    Writen(int, const void *, size_t);
+
+ssize_t readline(int, void *, size_t);       /* Section 3.9 */
+ssize_t Readline(int, void *, size_t);
+ssize_t readlinebuf(void **);                /* Section 3.9 */
+
+/**
+ * lib/wrapinet.c
+ */
+const char *Inet_ntop(int, const void *, char *, size_t);   /* Section 3.7 */
+void Inet_pton(int, const char*, void *);
+
+/**
+ * lib/wrapstdio.c
+ */
+char *Fgets(char *, int, FILE *);
+void Fputs(const char *, FILE *);
 
 void err_sys(const char *, ...)  __attribute__((noreturn));
 void err_quit(const char *, ...) __attribute__((noreturn));
