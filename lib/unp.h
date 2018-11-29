@@ -222,6 +222,7 @@ void str_echo(int);      /* Section 5.3 */
 void str_cli(FILE *, int);  /* Section 5.5 */
 
 char *sock_ntop(const struct sockaddr *, socklen_t);   /* Section 3.8 */
+char *Sock_ntop(const struct sockaddr *, socklen_t);
 
 ssize_t readn(int, void *, size_t);          /* Section 3.9 */
 ssize_t Readn(int, void *, size_t);
