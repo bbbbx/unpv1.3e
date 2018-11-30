@@ -1,0 +1,65 @@
+\section{I/O Multiplexing: The \texttt{select} and \texttt{poll} Functions}
+
+  \subsection{I/O Models}
+
+    在 Unix 中有 5 种 I/O models。
+
+    \begin{itemize}
+      \item blocking I/O
+      \item nonblocking I/O
+      \item I/O multiplexing（\texttt{select} 和 \texttt{poll}）
+      \item signal driven I/O（\texttt{SIGIO}）
+      \item asynchronous I/O（POSIX 中以 \texttt{aio\_} 开头的函数）
+    \end{itemize}
+
+  \subsection{\texttt{select} 函数}
+
+    调用该函数可以使进程告诉内核，该进程对哪些 descriptors 感兴趣以及愿意等待的时间。
+
+    \begin{minted}[frame=lines, breaklines]{c}
+    #include <sys/select.h>
+    #include <sys/time.h>
+
+    int select(int maxfdp1, fd_set *readset, fd_set *writeset, fd_set *exceptset, const struct timeval *timeout);
+    /* 返回 ready descriptors 的个数，返回 0 表示超时，返回 -1 表示出错 */
+    \end{minted}
+
+    其中 \texttt{timeout} 参数是愿意等待的时间。如果是 null pointer 的话，则永远等待下去。
+
+    中间的 3 个参数指定了我们要让内核进行测试 reading、writing 和 exception conditions 的 descriptors。可以使用下列的四个 macro 来设置或测试 descriptor set 内的 bits。
+
+    \begin{minted}[frame=lines]{c}
+    void FD_ZERO(fd_set *fdset);            /* 清空 fdset 内的所有 bits */
+    void FD_SET(int fd, fd_set *fdset);
+    void FD_CLR(int fd, fd_set *fdset);
+    int  FD_ISSET(int fd, fd_set *fdset);
+    \end{minted}
+  
+  \subsection{\texttt{shutdown} 函数}
+
+    用 \texttt{close} 函数来 terminate connection 有 2 个限制，这 2 个限制可以用 \texttt{shutdown} 来避免。
+
+    \begin{enumerate}
+      \item \texttt{close} 只是把 descriptor 的 reference count 减一。
+      \item \texttt{close} 会把数据传送的两个方向都终止掉：reading 和 writing。
+    \end{enumerate}
+
+    \begin{minted}[frame=lines]{c}
+    #include <sys/socket.h>
+
+    int shutdown(int sockfd, int howto);
+    \end{minted}
+
+    其中 \texttt{howto} 参数可以是 \texttt{SHUT\_RD}、\texttt{SHUT\_WR} 或 \texttt{SHUT\_RDWR}。
+
+  \subsection{\texttt{pselect} 函数}
+
+  \subsection{\texttt{poll} 函数}
+
+    \begin{minted}[frame=lines]{c}
+    #include <poll.h>
+
+    int poll(struct pollfd *fdarray, unsigned long nfds, int timeout);
+    /* 返回 ready descriptors 的个数，返回 0 表示超时，返回 -1 表示出错 */
+    \end{minted}
+    

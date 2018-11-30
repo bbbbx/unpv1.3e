@@ -210,11 +210,13 @@ void   Bind(int, const SA *, socklen_t);
 void   Listen(int, int);
 int    Accept(int, SA *, socklen_t*);
 void   Connect(int, const SA *, socklen_t);
+int    Shutdown(int, int);
 
 /**
  * lib/wrapunix.c
  */
 pid_t  Fork(void);                          
+ssize_t   Read(int, void *, size_t);
 void   Write(int, void *, size_t);
 void   Close(int);
 
@@ -245,6 +247,16 @@ void Inet_pton(int, const char*, void *);
  */
 char *Fgets(char *, int, FILE *);
 void Fputs(const char *, FILE *);
+
+/**
+ * lib/wrapselect.c
+ */
+int Select(int, fd_set *, fd_set *, fd_set *, struct timeval *);
+
+/**
+ * lib/wrappoll.c
+ */
+int Poll(struct pollfd *, unsigned long, int);
 
 void err_sys(const char *, ...)  __attribute__((noreturn));
 void err_quit(const char *, ...) __attribute__((noreturn));

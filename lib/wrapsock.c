@@ -48,3 +48,10 @@ void Connect(int family, const struct sockaddr *sa, socklen_t salen)
   if (connect(family, sa, salen) < 0)
     err_sys("connect error");
 }
+
+int Shutdown(int sockfd, int howto)
+{
+  if (shutdown(sockfd, howto) == -1)
+    err_sys("shutdown erro");
+  return (0);
+}
