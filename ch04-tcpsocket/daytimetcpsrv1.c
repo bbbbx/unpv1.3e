@@ -1,4 +1,4 @@
-#include "../lib/unp.h"
+#include "unp.h"
 #include <time.h>
 
 int main(void)

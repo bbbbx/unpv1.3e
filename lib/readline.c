@@ -17,7 +17,7 @@ static ssize_t my_read(int fd, char *ptr)
     read_ptr = read_buf;
   }
   read_cnt--;
-  *ptr = *read_buf;
+  *ptr = *read_ptr++;
   return (1);
 }
 
