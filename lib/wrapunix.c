@@ -38,3 +38,10 @@ void *Malloc(size_t size)
     err_sys("malloc error");
   return (ptr);
 }
+
+void Gettimeofday(struct timeval *tv, void *foo)
+{
+  if (gettimeofday(tv, foo) == -1)
+    err_sys("gettimeofday error");
+  return;
+}

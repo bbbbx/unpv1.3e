@@ -227,7 +227,6 @@ ssize_t   Read(int, void *, size_t);
 void      Write(int, void *, size_t);
 void      Close(int);
 void      *Malloc(size_t);
-void      Gettimeofday(struct timeval *, void *);
 
 void str_echo(int);      /* Section 5.3 */
 void str_cli(FILE *, int);  /* Section 5.5 */
@@ -279,18 +278,8 @@ struct addrinfo *Host_serv(const char *, const char *, int , int);
 /**
  * lib/sock_ntop_host.c
  */
-char *sock_ntop_host(const struct sockaddr *, socklen_t);
-char *Sock_ntop_host(const struct sockaddr *, socklen_t);
-
-/**
- * lib/tv_sub.c
- */
-void tv_sub(struct timeval *, struct timeval *);
-
-/**
- * libfree 目录
- */
-uint16_t in_cksum(uint16_t *, int);
+char *sock_ntop_host(struct sockaddr *, socklen_t);
+char *Sock_ntop_host(struct sockaddr *, socklen_t);
 
 void err_ret(const char *, ...);
 void err_sys(const char *, ...)  __attribute__((noreturn));

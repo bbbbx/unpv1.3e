@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-# AC_INIT(unp.h)
+AC_INIT(unp.h)
 # AC_CONFIG_SRCDIR([daytimetcpcli.c])
 AC_CONFIG_HEADERS([config.h])
 
@@ -41,6 +41,10 @@ AC_CHECK_TYPE(struct timespec,
 AC_CHECK_TYPE(struct addrinfo,
   AC_DEFINE(HAVE_ADDRINFO_STRUCT, 1, Define to 1 if <netdb.h> defines struct addrinfo), , [
     #include <netdb.h>
+  ])
+AC_CHECK_TYPE(struct sockaddr_dl,
+  AC_DEFINE(HAVE_SOCKADDR_DL_STRUCT, 1, Define to 1 if <net/if_dl.h> defines struct sockaddr_dl), , [
+    #include <net/if_dl.h>
   ])
 
 # Checks for library functions.

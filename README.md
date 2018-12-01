@@ -11,7 +11,7 @@ The source code for the examples shown in this book is available at book’s Web
 5. - [x] TCP Client/Server Example
 6. - [x] I/O Multiplexing: The `select` and `poll` Functions
 7. - [x] Socket Options
-8. - [ ] Elementary UDP Sockets
+8. - [x] Elementary UDP Sockets
 9. - [ ] Elementary SCTP Sockets
 10. - [ ] SCTP Client/Server Example
 11. - [ ] Name and Address Conversions

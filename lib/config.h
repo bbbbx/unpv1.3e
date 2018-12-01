@@ -34,6 +34,9 @@
 /* Define to 1 if you have the <pthread.h> header file. */
 #define HAVE_PTHREAD_H 1
 
+/* Define to 1 if <net/if_dl.h> defines struct sockaddr_dl */
+#define HAVE_SOCKADDR_DL_STRUCT 1
+
 /* Define to 1 if you have the <stdint.h> header file. */
 #define HAVE_STDINT_H 1
 
