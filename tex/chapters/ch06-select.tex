@@ -56,10 +56,21 @@
 
   \subsection{\texttt{poll} 函数}
 
+    \texttt{poll} 函数源自 SVR3，且只支持 STREAMS devices。SVR4 移除了该限制，允许 \texttt{poll} 函数支持任何的 descriptors。
+    \texttt{poll} 函数的功能与 \texttt{select} 函数类似。
+
     \begin{minted}[frame=lines]{c}
     #include <poll.h>
 
     int poll(struct pollfd *fdarray, unsigned long nfds, int timeout);
     /* 返回 ready descriptors 的个数，返回 0 表示超时，返回 -1 表示出错 */
+
+    struct pollfd {
+      int    fd;      /* 需要 check 的 descriptor */
+      short  events;  /* events of interest on fd */
+      short  revents; /* events that occurred on fd */
+    };
     \end{minted}
     
+    第一个参数是一个指针，指向了一个 array of structures 的第一个 element。
+    第二个参数 \texttt{nfds} 指定了在该 array of structures 中的 elements 的个数。

@@ -1,0 +1,25 @@
+\section{Socket Options}
+
+  \subsection{\texttt{getsockopt} 和 \texttt{setsockopt} 函数}
+
+    \begin{minted}[frame=lines]{c}
+    #include <sys/socket.h>
+    
+    int getsockopt(int sockfd, int level, int optname, void *optval, socklen_t *optlen);
+
+    int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t *optlen);
+    /* 成功返回 0，出错返回 -1 */
+    \end{minted}
+
+    其中，\texttt{level} 可以是下列的值：
+
+    \begin{enumerate}
+      \item \texttt{SOL\_SOCKET}：generic socket options，这些 options 是独立于协议的。
+      \item \texttt{IPPROTO\_IP}：IPv4 socket options。
+      \item \texttt{IPPROTO\_ICMPV6}：ICMPv6 socket options。
+      \item \texttt{IPPROTO\_IPV6}：IPv6 socket options。
+      \item \texttt{IPPROTO\_TCP}：TCP socket options。
+      \item \texttt{IPPROTO\_SCTP}：SCTP socket options。
+    \end{enumerate}
+
+    每个 \texttt{level} 都有许多对应的 \texttt{optname}。
