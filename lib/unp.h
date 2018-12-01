@@ -181,6 +181,11 @@ struct unp_in_pktinfo {
 
 typedef void Sigfunc(int);       /* for signal handlers */
 
+/**
+ * lib/signal.c
+ */
+Sigfunc *Signal(int, Sigfunc *);
+
 #define min(a,b)    ((a) < (b) ? (a) : (b))
 #define max(a,b)    ((a) > (b) ? (a) : (b))
 
@@ -211,17 +216,23 @@ void   Listen(int, int);
 int    Accept(int, SA *, socklen_t*);
 void   Connect(int, const SA *, socklen_t);
 int    Shutdown(int, int);
+int    Recvfrom(int , void *, size_t, int, struct sockaddr *, socklen_t *);
+int    Sendto(int, const void*, size_t, int, const struct sockaddr *, socklen_t);
 
 /**
  * lib/wrapunix.c
  */
-pid_t  Fork(void);                          
+pid_t     Fork(void);                          
 ssize_t   Read(int, void *, size_t);
-void   Write(int, void *, size_t);
-void   Close(int);
+void      Write(int, void *, size_t);
+void      Close(int);
+void      *Malloc(size_t);
 
 void str_echo(int);      /* Section 5.3 */
 void str_cli(FILE *, int);  /* Section 5.5 */
+
+void dg_echo(int, struct sockaddr *, socklen_t);   /* Section 8.4 */
+void dg_cli(FILE *, int, const struct sockaddr *, socklen_t); /* Section 8.6 */
 
 char *sock_ntop(const struct sockaddr *, socklen_t);   /* Section 3.8 */
 char *Sock_ntop(const struct sockaddr *, socklen_t);
