@@ -11,13 +11,15 @@ void readloop(void)
   struct timeval   tval;
 
   sockfd = Socket(pr->sasend->sa_family, SOCK_RAW, pr->icmpproto);
-  setuid(getuid());
+  setuid(getuid());     /* don't need special permissions any more */
+  setgid(getgid());
   if (pr->finit)
     (*pr->finit)();
 
-  size = 60 * 1024;
+  size = 60 * 1024;    /* OK if setsockopt fails */
   setsockopt(sockfd, SOL_SOCKET, SO_RCVBUF, &size, sizeof(size));
-  sig_alrm(SIGALRM);
+
+  sig_alrm(SIGALRM);    /* send first packet */
 
   iov.iov_base = recvbuf;
   iov.iov_len = sizeof(recvbuf);
