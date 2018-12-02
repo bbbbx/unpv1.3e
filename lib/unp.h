@@ -295,5 +295,6 @@ uint16_t in_cksum(uint16_t *, int);
 void err_ret(const char *, ...);
 void err_sys(const char *, ...)  __attribute__((noreturn));
 void err_quit(const char *, ...) __attribute__((noreturn));
+void err_msg(const char *, ...);
 
 #endif    
